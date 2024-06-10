@@ -21,9 +21,9 @@
 #include <fcntl.h>
 #include <unistd.h>
 
-#include <stdio.h>
+#include <cstdio>
 
-#include "msgq/messaging/msgq.h"
+#include "msgq/msgq.h"
 
 void sigusr2_handler(int signal) {
   assert(signal == SIGUSR2);

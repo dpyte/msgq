@@ -5,16 +5,18 @@
 #include <cerrno>
 #include <unistd.h>
 
-#include "msgq/messaging/impl_zmq.h"
+#include "msgq/impl_zmq.h"
 
 //FIXME: This is a hack to get the port number from the socket name, might have collisions
-static int get_port(std::string endpoint) {
-    std::hash<std::string> hasher;
-    size_t hash_value = hasher(endpoint);
-    int start_port = 8023;
-    int max_port = 65535;
-    int port = start_port + (hash_value % (max_port - start_port));
-    return port;
+namespace {
+    int get_port(const std::string &endpoint) {
+        std::hash<std::string> hasher;
+        size_t hash_value = hasher(endpoint);
+        int start_port = 8023;
+        int max_port = 65535;
+        int port = start_port + (hash_value % (max_port - start_port));
+        return port;
+    }
 }
 
 ZMQContext::ZMQContext() {
@@ -50,7 +52,7 @@ ZMQMessage::~ZMQMessage() {
 
 int ZMQSubSocket::connect(Context *context, std::string endpoint, std::string address, bool conflate, bool check_endpoint){
   sock = zmq_socket(context->getRawContext(), ZMQ_SUB);
-  if (sock == NULL){
+  if (sock == nullptr){
     return -1;
   }
 
@@ -82,7 +84,7 @@ Message * ZMQSubSocket::receive(bool non_blocking){
 
   int flags = non_blocking ? ZMQ_DONTWAIT : 0;
   int rc = zmq_msg_recv(&msg, sock, flags);
-  Message *r = NULL;
+  Message *r = nullptr;
 
   if (rc >= 0){
     // Make a copy to ensure the data is aligned
@@ -104,7 +106,7 @@ ZMQSubSocket::~ZMQSubSocket(){
 
 int ZMQPubSocket::connect(Context *context, std::string endpoint, bool check_endpoint){
   sock = zmq_socket(context->getRawContext(), ZMQ_PUB);
-  if (sock == NULL){
+  if (sock == nullptr){
     return -1;
   }
 

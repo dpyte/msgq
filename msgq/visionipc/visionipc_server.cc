@@ -8,12 +8,12 @@
 #include <sys/socket.h>
 #include <unistd.h>
 
-#include "msgq/messaging/messaging.h"
-#include "msgq/visionipc/ipc.h"
+#include "msgq/ipc.h"
+#include "msgq/visionipc/visionipc.h"
 #include "msgq/visionipc/visionipc_server.h"
-#include "msgq/logger/logger.h"
+#include "logger/logger.h"
 
-std::string get_endpoint_name(std::string name, VisionStreamType type){
+std::string get_endpoint_name(const std::string& name, VisionStreamType type){
   if (messaging_use_zmq()){
     assert(name == "camerad" || name == "navd");
     return std::to_string(9000 + static_cast<int>(type));

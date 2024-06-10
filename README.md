@@ -1,5 +1,8 @@
 # MSGQ: A lock free single producer multi consumer message queue
 
+This is a fork of the original msgq library by [CommaAI](https://github.com/commaai/msgq) slightly modified to work with my project(s) which also requires a mechanism to transport video and serialized data over a localized IPC channel.
+The change adds support for cmake and vcpkg (since those are the tools I use for my projects).
+
 ## What is this library?
 MSGQ is a generic high performance IPC pub sub system with a single publisher and multiple subscribers. MSGQ is designed to be a high performance replacement for ZMQ-like SUB/PUB patterns. It uses a ring buffer in shared memory to efficiently read and write data. Each read requires a copy. Writing can be done without a copy, as long as the size of the data is known in advance. While MSGQ is the core of this library, this library also allows replacing the MSGQ backend with ZMQ or a spoofed implementation that can be used for deterministic testing. This library also contains visionipc, an IPC system specifically for large contiguous buffers (like images/video).
 
@@ -16,7 +19,6 @@ The storage for the queue consists of an area of metadata, and the actual buffer
 The counter and the pointer are both 32 bit values, packed into 64 bit so they can be read and written atomically.
 
 The data buffer is a ring buffer. All messages are prefixed by an 8 byte size field, followed by the data. A size of -1 indicates a wrap-around, and means the next message is stored at the beginning of the buffer.
-
 
 ## Writing
 Writing involves the following steps:

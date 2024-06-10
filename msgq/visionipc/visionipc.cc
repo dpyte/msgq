@@ -1,9 +1,9 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
 #include <unistd.h>
-#include <assert.h>
-#include <errno.h>
+#include <cassert>
+#include <cerrno>
 
 #include <sys/mman.h>
 #include <sys/socket.h>
@@ -15,7 +15,7 @@
 #define getsocket() socket(AF_UNIX, SOCK_SEQPACKET, 0)
 #endif
 
-#include "msgq/visionipc/ipc.h"
+#include "visionipc.h"
 
 int ipc_connect(const char* socket_path) {
   int err;

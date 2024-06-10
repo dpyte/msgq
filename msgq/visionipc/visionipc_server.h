@@ -5,10 +5,10 @@
 #include <atomic>
 #include <map>
 
-#include "msgq/messaging/messaging.h"
+#include "msgq/ipc.h"
 #include "msgq/visionipc/visionbuf.h"
 
-std::string get_endpoint_name(std::string name, VisionStreamType type);
+std::string get_endpoint_name(const std::string& name, VisionStreamType type);
 std::string get_ipc_path(const std::string &name);
 
 class VisionIpcServer {
