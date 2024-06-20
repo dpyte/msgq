@@ -1,10 +1,10 @@
-cmake_minimum_required (VERSION 3.24)
+cmake_minimum_required (VERSION 3.22)
 set_property (GLOBAL PROPERTY USE_FOLDERS ON)
 
 set(CMAKE_TOOLCHAIN_FILE "${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/scripts/buildsystems/vcpkg.cmake"
 	CACHE STRING "Vcpkg toolchain file")
 
-project (msgq C CXX)
+project (msgq CXX)
 if (${CMAKE_SOURCE_DIR} STREQUAL {CMAKE_BINARY_DIR})
 	message (FATAL_ERROR "In-source build is not allowed, please create a separate build folder.")
 endif ()
@@ -34,7 +34,7 @@ if (NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
 		"RelWithDebInfo")
 endif ()
 
-
+# The following comment serves zero purpose, and other than making the cmake script "easy" to read
 ############################################################
 ## print info
 message (STATUS "build info:")
@@ -47,7 +47,7 @@ message (STATUS "  Host System Processor: ${CMAKE_HOST_SYSTEM_PROCESSOR}")
 # build options
 option (ENABLE_ASAN "Turn on ASAN" OFF)
 option (ENABLE_UBSAN "Turn on UBSan" OFF)
-option (CLANG_TIDY "Enable clang-tidy" ON)
+option (CLANG_TIDY "Enable clang-tidy" OFF)
 
 
 ############################################################
@@ -101,6 +101,7 @@ set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 ############################################################
 ## check required libraries
 find_package (czmq CONFIG REQUIRED)
-
+find_package (OpenCL REQUIRED)
+find_package (Python3 REQUIRED COMPONENTS Interpreter Development NumPy)
 
 add_subdirectory (msgq)

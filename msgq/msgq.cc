@@ -29,7 +29,7 @@ void sigusr2_handler(int signal) {
   assert(signal == SIGUSR2);
 }
 
-uint64_t msgq_get_uid(void){
+uint64_t msgq_get_uid(){
   std::random_device rd("/dev/urandom");
   std::uniform_int_distribution<uint64_t> distribution(0, std::numeric_limits<uint32_t>::max());
 
@@ -47,7 +47,7 @@ int msgq_msg_init_size(msgq_msg_t * msg, size_t size){
   msg->size = size;
   msg->data = new(std::nothrow) char[size];
 
-  return (msg->data == NULL) ? -1 : 0;
+  return (msg->data == nullptr) ? -1 : 0;
 }
 
 
@@ -79,8 +79,6 @@ void msgq_wait_for_subscriber(msgq_queue_t *q){
   while (*q->num_readers == 0){
     // wait for subscriber
   }
-
-  return;
 }
 
 int msgq_new_queue(msgq_queue_t * q, const char * path, size_t size){
@@ -100,20 +98,20 @@ int msgq_new_queue(msgq_queue_t * q, const char * path, size_t size){
     return -1;
   }
 
-  int rc = ftruncate(fd, size + sizeof(msgq_header_t));
+  int rc = ftruncate(fd, static_cast<__off_t>(size + sizeof(msgq_header_t)));
   if (rc < 0){
     close(fd);
     return -1;
   }
-  char * mem = (char*)mmap(NULL, size + sizeof(msgq_header_t), PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
+  char * mem = (char*)mmap(nullptr, size + sizeof(msgq_header_t), PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
   close(fd);
 
-  if (mem == NULL){
+  if (mem == nullptr){
     return -1;
   }
   q->mmap_p = mem;
 
-  msgq_header_t *header = (msgq_header_t *)mem;
+  auto *header = (msgq_header_t *)mem;
 
   // Setup pointers to header segment
   q->num_readers = reinterpret_cast<std::atomic<uint64_t>*>(&header->num_readers);
@@ -137,7 +135,7 @@ int msgq_new_queue(msgq_queue_t * q, const char * path, size_t size){
 }
 
 void msgq_close_queue(msgq_queue_t *q){
-  if (q->mmap_p != NULL){
+  if (q->mmap_p != nullptr){
     munmap(q->mmap_p, q->size + sizeof(msgq_header_t));
   }
 }
