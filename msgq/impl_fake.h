@@ -31,7 +31,7 @@ public:
   }
 
   int connect(Context *context, std::string endpoint, std::string address, bool conflate=false, bool check_endpoint=true) override {
-    const char* cereal_prefix = std::getenv("CEREAL_FAKE_PREFIX");
+    const char* cereal_prefix = std::getenv("WATCHDOG_FAKE_PREFIX");
 
     char* mem;
     std::string identifier = cereal_prefix != nullptr ?  std::string(cereal_prefix) : "";

@@ -19,14 +19,14 @@
 #include <sys/eventfd.h>
 
 void event_state_shm_mmap(std::string endpoint, std::string identifier, char **shm_mem, std::string *shm_path) {
-  const char* op_prefix = std::getenv("OPENPILOT_PREFIX");
+  const char* op_prefix = std::getenv("WATCHDOG_PREFIX");
 
   std::string full_path = "/dev/shm/";
   if (op_prefix) {
     full_path += std::string(op_prefix) + "/";
   }
-  full_path += CEREAL_EVENTS_PREFIX + "/";
-  if (identifier.size() > 0) {
+  full_path += WATCHDOG_EVENTS_PREFIX + "/";
+  if (!identifier.empty()) {
     full_path += identifier + "/";
   }
   std::filesystem::create_directories(full_path);
@@ -43,7 +43,7 @@ void event_state_shm_mmap(std::string endpoint, std::string identifier, char **s
     throw std::runtime_error("Could not truncate shared memory file.");
   }
 
-  char * mem = (char*)mmap(NULL, sizeof(EventState), PROT_READ | PROT_WRITE, MAP_SHARED, shm_fd, 0);
+  char * mem = (char*)mmap(nullptr, sizeof(EventState), PROT_READ | PROT_WRITE, MAP_SHARED, shm_fd, 0);
   close(shm_fd);
   if (mem == nullptr) {
     throw std::runtime_error("Could not map shared memory file.");
@@ -91,21 +91,21 @@ Event SocketEventHandle::recv_ready() {
 
 void SocketEventHandle::toggle_fake_events(bool enabled) {
   if (enabled)
-    setenv("CEREAL_FAKE", "1", true);
+    setenv("WATCHDOG_FAKE", "1", true);
   else
-    unsetenv("CEREAL_FAKE");
+    unsetenv("WATCHDOG_FAKE");
 }
 
 void SocketEventHandle::set_fake_prefix(std::string prefix) {
   if (prefix.size() == 0) {
-    unsetenv("CEREAL_FAKE_PREFIX");
+    unsetenv("WATCHDOG_FAKE_PREFIX");
   } else {
-    setenv("CEREAL_FAKE_PREFIX", prefix.c_str(), true);
+    setenv("WATCHDOG_FAKE_PREFIX", prefix.c_str(), true);
   }
 }
 
 std::string SocketEventHandle::fake_prefix() {
-  const char* prefix = std::getenv("CEREAL_FAKE_PREFIX");
+  const char* prefix = std::getenv("WATCHDOG_FAKE_PREFIX");
   if (prefix == nullptr) {
     return "";
   } else {

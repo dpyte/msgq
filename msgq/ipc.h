@@ -21,7 +21,7 @@ class Context {
 public:
   virtual void * getRawContext() = 0;
   static Context * create();
-  virtual ~Context(){}
+  virtual ~Context() = default;
 };
 
 class Message {
@@ -31,7 +31,7 @@ public:
   virtual void close() = 0;
   virtual size_t getSize() = 0;
   virtual char * getData() = 0;
-  virtual ~Message(){}
+  virtual ~Message() = default;
 };
 
 
@@ -43,7 +43,7 @@ public:
   virtual void * getRawSocket() = 0;
   static SubSocket * create();
   static SubSocket * create(Context * context, std::string endpoint, std::string address="127.0.0.1", bool conflate=false, bool check_endpoint=true);
-  virtual ~SubSocket(){}
+  virtual ~SubSocket() = default;
 };
 
 class PubSocket {
@@ -55,7 +55,7 @@ public:
   static PubSocket * create();
   static PubSocket * create(Context * context, std::string endpoint, bool check_endpoint=true);
   static PubSocket * create(Context * context, std::string endpoint, int port, bool check_endpoint=true);
-  virtual ~PubSocket(){}
+  virtual ~PubSocket() = default;
 };
 
 class Poller {
@@ -64,5 +64,5 @@ public:
   virtual std::vector<SubSocket*> poll(int timeout) = 0;
   static Poller * create();
   static Poller * create(std::vector<SubSocket*> sockets);
-  virtual ~Poller(){}
+  virtual ~Poller() = default;
 };

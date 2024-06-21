@@ -37,8 +37,8 @@ uint64_t msgq_get_uid(){
     // TODO: this doesn't work
     uint64_t uid = distribution(rd) << 32 | getpid();
   #else
-    uint64_t uid = distribution(rd) << 32 | syscall(SYS_gettid);
-  #endif
+  uint64_t uid = distribution(rd) << 32 | static_cast<unsigned long>(syscall(SYS_gettid));
+#endif
 
   return uid;
 }
@@ -86,7 +86,7 @@ int msgq_new_queue(msgq_queue_t * q, const char * path, size_t size){
   std::signal(SIGUSR2, sigusr2_handler);
 
   std::string full_path = "/dev/shm/";
-  const char* prefix = std::getenv("OPENPILOT_PREFIX");
+  const char* prefix = std::getenv("WATCHDOG_PREFIX");
   if (prefix) {
     full_path += std::string(prefix) + "/";
   }

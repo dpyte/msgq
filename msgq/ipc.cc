@@ -14,8 +14,8 @@ const bool MUST_USE_ZMQ = false;
 
 bool messaging_use_zmq(){
   if (std::getenv("ZMQ") || MUST_USE_ZMQ) {
-    if (std::getenv("OPENPILOT_PREFIX")) {
-      std::cerr << "OPENPILOT_PREFIX not supported with ZMQ backend\n";
+    if (std::getenv("WATCHDOG_PREFIX")) {
+      std::cerr << "WATCHDOG_PREFIX not supported with ZMQ backend\n";
       assert(false);
     }
     return true;
@@ -24,8 +24,8 @@ bool messaging_use_zmq(){
 }
 
 bool messaging_use_fake(){
-  char* fake_enabled = std::getenv("CEREAL_FAKE");
-  return fake_enabled != NULL;
+  char* fake_enabled = std::getenv("WATCHDOG_FAKE");
+  return fake_enabled != nullptr;
 }
 
 Context * Context::create(){
@@ -113,7 +113,7 @@ Poller * Poller::create(){
 Poller * Poller::create(std::vector<SubSocket*> sockets){
   Poller * p = Poller::create();
 
-  for (auto s : sockets){
+  for (auto s : sockets) {
     p->registerSocket(s);
   }
   return p;

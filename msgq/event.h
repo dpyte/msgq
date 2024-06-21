@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 
-#define CEREAL_EVENTS_PREFIX std::string("cereal_events")
+#define WATCHDOG_EVENTS_PREFIX std::string("watchdog_events")
 
 void event_state_shm_mmap(std::string endpoint, std::string identifier, char **shm_mem, std::string *shm_path);
 
@@ -27,14 +27,14 @@ private:
     }
   }
 public:
-  Event(int fd = -1);
+  explicit Event(int fd = -1);
 
   void set() const;
-  int clear() const;
+  [[nodiscard]] int clear() const;
+  [[nodiscard]] bool peek() const;
+  [[nodiscard]] bool is_valid() const;
+  [[nodiscard]] int fd() const;
   void wait(int timeout_sec = -1) const;
-  bool peek() const;
-  bool is_valid() const;
-  int fd() const;
 
   static int wait_for_one(const std::vector<Event>& events, int timeout_sec = -1);
 };
@@ -44,7 +44,7 @@ private:
   std::string shm_path;
   EventState* state;
 public:
-  SocketEventHandle(std::string endpoint, std::string identifier = "", bool override = true);
+  explicit SocketEventHandle(std::string endpoint, std::string identifier = "", bool override = true);
   ~SocketEventHandle();
 
   bool is_enabled();
