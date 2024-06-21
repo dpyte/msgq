@@ -77,7 +77,7 @@ endif ()
 
 if (${ENABLE_EXTRA_DEBUG})
 	set (CMAKE_CXX_FLAGS_DEBUG
-		"${CMAKE_CXX_FLAGS_DEBUG} -Og -DDEBUG -Wall -Wnarrowing -Wconversion -pedantic -fPIC -Wno-vla-extension")
+		"${CMAKE_CXX_FLAGS_DEBUG} -Og -DDEBUG -Wall -Wnarrowing -Wconversion -pedantic -fPIC -Wno-vla")
 	set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CMAKE_CXX_FLAGS_DEBUG}")
 endif ()
 
@@ -102,6 +102,8 @@ set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 ## check required libraries
 find_package (czmq CONFIG REQUIRED)
 find_package (OpenCL REQUIRED)
+
+# TODO: Remove Python support. Python-bridge implementation can be found in https://github.com/dpyte/tunnel.git.
 find_package (Python3 REQUIRED COMPONENTS Interpreter Development NumPy)
 
 add_subdirectory (msgq)

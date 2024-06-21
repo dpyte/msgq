@@ -27,6 +27,7 @@ set (VisionIPC_SOURCES
 	visionipc/visionipc_server.cc visionipc/visionipc_server.h
 	visionipc/visionipc_client.cc visionipc/visionipc_client.h
 	visionipc/visionbuf.cc visionipc/visionbuf.h
+		visionipc/visionbuf_cl.cc
 	)
 
 add_library (visionipc ${VisionIPC_SOURCES})
